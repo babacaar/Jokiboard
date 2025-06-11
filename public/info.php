@@ -11,7 +11,7 @@ include "../modules/header.php";
 <body>
     <div class="info page">
         <section class="page-content">
-            <form id="infoForm" method="post" action="../config/controller_infos.php">
+            <form id="infoForm" method="post" action="../controllers/controller_infos.php">
                 <h1>Informations</h1>
 
                 <hr />

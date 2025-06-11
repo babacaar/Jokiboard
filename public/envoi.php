@@ -7,9 +7,8 @@ include "../modules/header.php";
 <body>
     <div class="page">
         <section class="page-content">
-
             <?php
-            ini_set('display_errors', 1);
+            //ini_set('display_errors', 1);
 
             require_once "../config/controller_config_files.php";
 

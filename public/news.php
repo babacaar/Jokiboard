@@ -23,7 +23,7 @@ include "../modules/header.php";
             $link = $res0['Conf_sites'];
             $id = $res0['Conf_id'];
             $port = '22';
-            $news = $Url . "/public/display_info.php";
+            $news = $siteUrl . "/display_info.php";
 
             $stmt1 = $pdo->prepare("SELECT Conf_id, Conf_date, Conf_sites, LENGTH(Conf_sites) - LENGTH(REPLACE(Conf_sites, ' ', '')) +2 AS nombre_de_liens FROM `configuration` ORDER BY Conf_id DESC LIMIT 1");
             $stmt1->execute();

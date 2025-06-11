@@ -113,8 +113,8 @@ include "../modules/header.php";
                             <button tabindex="0"><i class="fa-solid fa-triangle-exclamation"></i>Alertes <i
                                     id="menu-icon" class="fa-solid fa-chevron-down"></i></button>
                             <div class="dropdown-content">
-                                <a id="alertfunction" tabindex="0" href='<?php echo $siteUrl . "public/ppmsAlert.php" ?>' data-option="alerte-ppms">PPMS</a>
-                                <a id="alertfunction2" tabindex="0" href='<?php echo $siteUrl . "public/feuAlert.php" ?>'
+                                <a id="alertfunction" tabindex="0" href='<?php echo $siteUrl . "/ppmsAlert.php" ?>' data-option="alerte-ppms">PPMS</a>
+                                <a id="alertfunction2" tabindex="0" href='<?php echo $siteUrl . "/feuAlert.php" ?>'
                                     data-option="alerte-incendie">Incendie</a>
                             </div>
                         </div>

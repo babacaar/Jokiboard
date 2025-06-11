@@ -14,7 +14,7 @@ try {
 // Vérification si l'utilisateur est connecté
 if (!isset($_SESSION['id_utilisateur'])) {
     // Redirection vers la page de connexion si l'utilisateur n'est pas connecté
-    header("Location:/connexion.php");
+    header("Location:/public/connexion.php");
     exit(); // Arrêt de l'exécution du script pour éviter tout accès non autorisé
 }
 

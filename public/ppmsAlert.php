@@ -12,7 +12,7 @@ include "../modules/header.php";
             <h1>L'alerte est lancée, mettez-vous en sécurité à présent.</h1>
             <hr>
             <a tabindex="0" href='<?php require_once "../config/controller_config_files.php";
-                                        echo $Url . "/groupe.php" ?>' class="back-btn"><i
+                                        echo $siteUrl . "/groupe.php" ?>' class="back-btn"><i
                     class="fa-solid fa-arrow-right-from-bracket fa-rotate-180"></i>Retour</a>
 
 		<?php

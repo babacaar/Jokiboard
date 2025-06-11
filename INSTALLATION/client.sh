@@ -177,7 +177,7 @@ EOF
 
 
 #Script test.sh pour lancer le kiosque
-cat <<EOF | tee /home/pi/test.sh > /dev/null
+cat <<'EOF' | tee /home/pi/test.sh > /dev/null
 #!/bin/bash
 sudo systemctl stop alertPpms.service
 sudo systemctl stop alertFeu.service
@@ -195,7 +195,7 @@ EOF
 
 
 #Script kiosk.sh pour lancer l'affichage des liens
-cat <<EOF | tee /home/pi/kiosk.sh > /dev/null
+cat <<'EOF' | tee /home/pi/kiosk.sh > /dev/null
 !/bin/bash
 #Compteur d'itérations
 compteur=0;
@@ -205,7 +205,7 @@ lancer_chromium() {
     xset s off
     xset -dpms
     unclutter -idle 1 -root &
- /usr/bin/chromium-browser --kiosk --noerrdialogs https://threatmap.checkpoint.com/ http://$DBHOST/public/display_absences.php 
+ /usr/bin/chromium-browser --kiosk --noerrdialogs https://threatmap.checkpoint.com/  https://cybermap.kaspersky.com/fr/stats#country=177&type=OAS&period=w https://cybermap.kaspersky.com/fr
     wmctrl -k on
 }
 
@@ -254,7 +254,7 @@ done
 EOF
 
 #Script pour lancer l'affichage de l'information ponctuelle
-cat <<EOF | tee /home/pi/time.sh > /dev/null
+cat <<'EOF' | tee /home/pi/time.sh > /dev/null
 
 #!/bin/bash
 duree=$1
