@@ -1,0 +1,13 @@
+# JokiBoard .gitignore file
+ca_certificates/*
+!ca_certificates/.gitkeep
+raspberry_upload/*
+Videos/*
+*.bak
+*.log
+*.env
+*.sh
+*.jpg
+*.htaccess
+!INSTALLATION/*.sh
+

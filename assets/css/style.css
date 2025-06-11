@@ -1,0 +1,1232 @@
+/*---------------GENERAL---------------*/
+
+:root {
+  --bg-image-url: /*linear-gradient(var(--transparent-light), var(--transparent-light)),*/
+    url("../images/BGv2.png"); /* default: "https://osticket.lpjw.net/osticket/scp/logo.php?backdrop" */
+  --background: #ff721f;
+  --primary: #ff721f; /* default: #ff721f */
+  --light-primary: #ffb98f;
+  --secondary: #0099dc; /* default: #0099dc */
+  --light-secondary: #a8e9ff;
+  --alert: #d61757;
+  --text-alert: #fff;
+  --info: #d61757;
+  --text-info: #fff;
+  --theme-color: #fff;
+  --grey1: #f8f8f8;
+  --grey2: #e6e6e6;
+  --grey3: #c1c1c1;
+  --grey4: #848484;
+  --grey5: #262626;
+  --text-color: #000;
+  --shadow: rgba(0, 0, 0, 0.3);
+  --transparent-light: rgba(255, 255, 255, 0.3);
+  --transparent-dark: rgba(51, 51, 51, 0.7);
+  scroll-behavior: smooth;
+}
+
+/* Code for Firefox */
+::-moz-selection {
+  color: white;
+  background: var(--primary);
+}
+
+::selection {
+  color: white;
+  background: var(--primary);
+}
+
+*:focus {
+  outline: 3px solid var(--secondary) !important;
+}
+
+/* Supprimer le style du focus lorsque l'élément est actif (:active:focus) */
+*:active:focus {
+  outline: none !important;
+}
+
+html {
+  background-color: var(--background);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  position: relative;
+  font-family: Arial, Helvetica, sans-serif;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+span {
+  color: black;
+}
+
+.background-image {
+  margin: 0;
+  padding: 0;
+  background-image: var(--bg-image-url);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  width: 100%;
+  height: 100vh;
+  opacity: 0.75;
+  position: fixed;
+  z-index: -10;
+}
+
+header img {
+  max-width: 350px;
+  margin: 10px;
+}
+
+footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  min-height: 50px;
+  margin-top: 40px;
+  /* color: transparent; */
+}
+.taille {
+ min-height:auto !important;
+ margin-top :auto !important;
+}
+footer a {
+  /* text-decoration: none; */
+  color: black !important;
+}
+
+h1 {
+  font-size: 54px;
+  text-align: center;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin-top: 0;
+  color: var(--primary);
+  font-weight: bold;
+  ;
+}
+
+hr {
+  width: 100%;
+  /* margin-bottom: 20px; */
+}
+
+a:link {
+  color: var(--secondary);
+}
+
+a:hover {
+  color: var(--light-secondary);
+}
+
+a:active {
+  color: var(--primary);
+}
+
+a:visited {
+  color: var(--light-secondary);
+}
+
+i {
+  color: black;
+}
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+  width: 100%;
+}
+.page-content-tomorrow {
+  background-color: white;
+  margin: 20px 20px;
+  padding: 50px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  box-shadow: 3px 3px 3px 3px black;
+  display: flex;
+  flex-direction: column;
+  width:70%;
+ }
+.page-content {
+  background-color: white;
+  margin: 30px 20px;
+  padding: 50px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  box-shadow: 3px 3px 3px 3px black;
+  display: flex;
+  flex-direction: column;
+}
+.page-content-calendar {
+  background-color: white;
+  margin-top: -83px;
+  margin-bottom: 24px;
+  margin-right: 20px;
+  margin-left: 20px;
+  padding: 50px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  box-shadow: 3px 3px 3px 3px black;
+  display: flex;
+  flex-direction: column;
+  width:70%;
+  height:83%;
+ }
+
+
+.page-content-calendrier {
+  background-color: white;
+  margin: 30px 20px;
+  padding: 50px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  box-shadow: 3px 3px 3px 3px black;
+  display: flex;
+  flex-direction: column;
+  line-height: normal; /* Reset line height to default to avoid unexpected spacing */
+}
+.page-content.large {
+  width: 100%;
+  margin: 30px 0;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.page-content .links {
+  display: flex;
+  flex-direction: row;
+  height:auto;
+}
+
+.page-content .links .date {
+  color: var(--secondary);
+  font-weight: bold;
+  margin-right: 20px;
+}
+
+.calendar-container {
+  display: flex;
+  justify-content: center;  /* Centre horizontalement */
+  align-items: center;      /* Centre verticalement */
+  width: 100%;
+  height: 83vh;            /* Prend toute la hauteur visible */
+}
+
+/* Conteneur principal */
+.gestion-calendrier .flex-container {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 20px;
+    flex-wrap: wrap; /* Permet de passer à la ligne sur les petits écrans */
+}
+
+/* Formulaire */
+.gestion-calendrier .form-container {
+    flex: 1;
+    max-width: 45%; /* Réduit la taille du formulaire */
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px; /* Moins d'espace autour du formulaire */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #333;
+}
+
+.gestion-calendrier .form-container h2 {
+    color: #ff6600;
+    margin-bottom: 10px;
+}
+
+.gestion-calendrier .form-container label {
+    display: inline-block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #555;
+    margin-right: 20px;
+}
+
+.gestion-calendrier .form-container input[type="text"] {
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.gestion-calendrier .form-container input[type="radio"] {
+    vertical-align: middle; /* Aligne le bouton radio avec le texte */
+    margin-right: 10px; /* Un peu d'espace entre le bouton et le texte */
+}
+    
+
+
+.gestion-calendrier .submit-btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.gestion-calendrier .submit-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Séparateur vertical */
+.gestion-calendrier .separator {
+    width: 1px;
+    background-color: #ddd;
+    height: auto;
+    margin-top: 20px;
+}
+
+/* Liste des calendriers */
+.gestion-calendrier .list-container {
+    flex: 2;
+    max-width: 50%; /* Réduit la taille de la liste */
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow-x: auto; /* Permet le défilement horizontal pour les grandes tables */
+}
+
+.gestion-calendrier .list-container h2 {
+    color: #ff6600;
+    margin-bottom: 10px;
+}
+
+/* Table des calendriers */
+.gestion-calendrier table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 14px; /* Réduit la taille de police pour optimiser l'espace */
+}
+
+.gestion-calendrier table th, 
+.gestion-calendrier table td {
+    border: 1px solid #ddd;
+    padding: 8px; /* Moins de padding pour les cellules */
+    text-align: left;
+}
+
+.gestion-calendrier table th {
+    background-color: #ff6600;
+    color: #fff;
+    font-weight: bold;
+}
+
+.gestion-calendrier table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.gestion-calendrier table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.gestion-calendrier table button {
+    font-weight: bold;
+    font-size: 16px;
+    background-color: white;
+    color: black;
+    box-shadow: 3px 3px 3px black;
+    border-radius: 3px;
+    padding: 10px;
+    height: fit-content;
+    width: fit-content;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.gestion-calendrier table button:hover {
+  background-color: var(--light-secondary);
+  color: black;
+
+}
+
+.gestion-calendrier table button.delete-btn {
+    background-color: #dc3545;
+}
+
+.gestion-calendrier table button.delete-btn:hover {
+    background-color: #c82333;
+}
+
+/* Conteneur des boutons Modifer et Supprimer */
+.button-container {
+    display: flex; /* Utilise flexbox pour aligner les éléments en ligne */
+    gap: 10px; /* Ajoute un espace entre les deux boutons */
+}
+
+/* Styles supplémentaires pour les boutons */
+.button-container button {
+    padding: 5px 10px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.button-container i {
+    margin-right: 5px; /* Ajoute un peu d'espace entre l'icône et le texte */
+}
+
+
+/* Style pour l'icône du point d'interrogation */
+.info-icon {
+    display: inline-block;
+    background-color: var(--light-secondary);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #555;
+    cursor: pointer;
+    margin-left: 5px;
+    position: relative; /* Nécessaire pour la position de l'info-bulle */
+}
+
+/* Style pour la boîte de l'infobulle */
+.info-icon:hover::after {
+    content: attr(data-tooltip); /* Affiche le texte contenu dans l'attribut data-tooltip */
+    position: absolute;
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: normal; /* Permet le retour à la ligne dans l'infobulle */
+    word-wrap: break-word; /* Permet de casser le texte sur plusieurs lignes si nécessaire */
+    top: 50%;  /* Positionne l'infobulle au-dessus de l'icône */
+    left: 105%;
+    transform: translateX(-50%);  /* Centre l'infobulle horizontalement */
+    z-index: 100;
+    max-width: 300px; /* Limite la largeur de l'infobulle */
+    width: auto; /* Laisse l'infobulle s'ajuster à la taille du contenu */
+    pointer-events: none; /* Permet de ne pas interférer avec d'autres éléments survolés */
+}
+
+/* Assurez-vous que le label a un positionnement relatif pour que l'info-bulle se positionne correctement */
+label {
+    position: relative;
+    display: inline-block;
+}
+
+/*---------------MESSAGES & TOOLTIPS---------------*/
+
+.message {
+  margin: 20px 0;
+  max-width: 500px;
+}
+
+.debug-msg {
+  color: red;
+  font-weight: bold;
+}
+
+.colored-icon {
+  color: var(--secondary);
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-content {
+  display: none;
+  font-weight: 400;
+  font-size: 12px;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: var(--grey1);
+  border: 1px solid var(--grey2);
+  padding: 10px;
+  z-index: 1;
+  white-space: nowrap;
+}
+
+.tooltip:hover .tooltip-content {
+  display: block;
+}
+
+/*---------------BUTTONS---------------*/
+.copy-success::after {
+    content: '\2714'; /* Code Unicode pour l'encoche verte */
+    color: green; /* Couleur verte */
+    margin-left: 5px; /* Marge à gauche pour l'espacement */
+}
+
+
+button,
+input[type="button"],
+.back-btn {
+  font-weight: bold;
+  font-size: 16px;
+  background-color: white;
+  color: black;
+  box-shadow: 3px 3px 3px black;
+  border-radius: 3px;
+  padding: 10px;
+  height: fit-content;
+  width: fit-content;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.back-btn {
+  text-decoration: none;
+  width: fit-content;
+  color: black !important;
+}
+
+.back-btn i {
+  margin-right: 10px;
+}
+
+button:hover,
+input[type="button"]:hover,
+.back-btn:hover {
+  background-color: var(--light-secondary);
+  color: black;
+}
+
+button:active,
+input[type="button"]:active,
+.back-btn:active {
+  background-color: var(--secondary);
+  transform: translateY(4px);
+  color: white;
+}
+
+button:active i {
+  color: white;
+}
+
+.btns-line {
+  display: flex;
+  flex-direction: row;
+  height: fit-content;
+  justify-content: flex-start;
+}
+
+.btns-line button {
+  margin-right: 15px;
+}
+
+.btns-line button i {
+  margin-right: 5px;
+}
+
+/*---------------FORMS---------------*/
+
+form {
+  max-width: 600px;
+  margin: 0;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+  padding: 0;
+}
+
+textarea,
+input {
+  width: 100%;
+  margin: 8px 0;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+
+fieldset {
+  margin-top: 20px;
+}
+
+.input-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.input-row label {
+  margin-right: 10px;
+}
+label[for="google"]{
+margin:0;
+}
+label[for="outlook"]{
+margin:0;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="datetime-local"] {
+  background-color: white;
+  color: black;
+  width: 100%;
+  padding: 12px 20px;
+  margin: 10px 0;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+input[type="number"] {
+  max-width: 50px;
+  height: 40px;
+  background-color: white;
+  color: black;
+  width: 100%;
+  padding: 5px;
+  margin: 10px 0;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+input[type="color"] {
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+  margin-right: 10px;
+  background-color: white;
+  box-shadow: 3px 3px 3px black;
+  border-radius: 3px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+input[type="color"]:hover {
+  background-color: var(--grey2);
+}
+
+input[type="color"]:active {
+  background-color: var(--grey3);
+}
+
+.back-btn,
+.submit-btn,
+.reset-btn {
+  margin-top: 20px;
+}
+
+input[type="submit"],
+.submit-btn,
+.reset-btn {
+  float: right;
+  text-align: center;
+  background-color: white;
+  color: black;
+  box-shadow: 3px 3px 3px black;
+  border-radius: 3px;
+  padding: 10px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+input[type="checkbox"] {
+  width: auto;
+  accent-color: var(--secondary);
+}
+
+input[type="radio"] {
+  width: auto;
+  margin:0;
+  accent-color: var(--secondary);
+}
+
+.reset-btn {
+  float: left;
+}
+
+input[type="submit"]:hover,
+.submit-btn:hover,
+.reset-btn:hover {
+  background-color: var(--light-secondary);
+}
+
+input[type="submit"]:active,
+.submit-btn:active,
+.reset-btn:active {
+  background-color: var(--secondary);
+  transform: translateY(4px);
+  color: white;
+}
+
+select {
+  margin: 15px 0;
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: white;
+}
+
+label {
+  color: black;
+  font-weight: bold;
+  margin-top: 10px;
+  display: inline-block;
+}
+
+.checkbox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 15px 0;
+}
+
+.checkbox input {
+  max-width: 15px;
+  max-height: 15px;
+  margin-right: 5px;
+}
+
+.checkbox label {
+  margin: 0;
+}
+
+.radio {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 15px 0;
+}
+
+.radio input {
+  max-width: 15px;
+  max-height: 15px;
+  margin-right: 5px;
+}
+
+.radio label {
+  margin: 0;
+}
+
+.required {
+  color: var(--primary);
+  font-size: 20px;
+}
+
+/*---------------ALERT & INFO---------------*/
+
+.alert {
+  justify-content: center;
+}
+
+.banner {
+  background-color: var(--alert);
+  color: white;
+  text-align: center;
+  padding: 10px;
+  width: 100%;
+  height: 500px;
+  z-index: 5;
+  display: none; 
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  box-shadow: 0 0 8px 5px var(--transparent-dark);
+}
+
+.banner p {
+  color: var(--text-alert) !important;
+  font-size: 2.5vw; /* vw permet d'adapter la taille du texte à la largeur de la page*/
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.banner.overview {
+  display: none;
+  max-height: 300px;
+} 
+
+.banner.overview p {
+  font-size: 50px;
+}
+
+.info-banner {
+  background-color: var(--info) !important;
+}
+
+.info-banner p {
+  color: var(--text-info) !important;
+}
+
+.blink {
+  animation-duration: 1s;
+  animation-name: blink;
+  animation-iteration-count: infinite;
+  transition: none;
+}
+
+/* Animation du clignotement */
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  40% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/*---------------MENU PAGE---------------*/
+
+.menu-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+}
+
+.menu-container a {
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 24px;
+  color: black;
+}
+
+.menu-container hr {
+  width: 100%;
+}
+
+.menu button {
+  margin-top: 20px;
+  padding: 15px 30px;
+  border-radius: 10px;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 25px;
+  word-wrap: break-word;
+}
+
+.menu .description {
+  margin: 15px 0;
+  font-size: 16px;
+  word-wrap: break-word;
+}
+
+/*---------------DROPDOWN MENUS---------------*/
+
+.navigation {
+  height: 160px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.header-menu-container {
+  position: fixed;
+  display: flex;
+  flex-direction: row-reverse;
+  top: 50px;
+  right: 50px;
+  z-index: 10;
+}
+
+.header-settings-container {
+  position: fixed;
+  display: flex;
+  flex-direction: row-reverse;
+  top: 50px;
+  right: 50px;
+  z-index: 10;
+}
+
+.header-menu {
+  display: flex;
+  flex-direction: row;
+  height: auto;
+}
+
+.header-settings {
+  display: flex;
+  flex-direction: row;
+  height: auto;
+}
+
+.alert-menu-container {
+  display: flex;
+  flex-direction: row;
+  height: fit-content;
+}
+
+.alert-menu {
+  display: block;
+  height: auto;
+}
+
+.list-menu-container {
+  display: flex;
+  flex-direction: row;
+  top: 200px;
+  left: 50px;
+  margin: 10px 0 50px 50px;
+  height: fit-content;
+}
+
+.list-menu {
+  display: block;
+  height: auto;
+  margin-left: 20px;
+}
+
+.absence-menu {
+  display: block;
+  height: auto;
+  margin-left: 10px;
+}
+
+.list-menu:last-child {
+  position: absolute;
+  margin-left: 145px;
+}
+
+.alert-menu-container button,
+.list-menu-container button,
+.header-menu-container button {
+  min-width: 40px;
+}
+
+.alert-menu-container button {
+  margin-right: 0;
+}
+
+.alert-menu .dropdown-content,
+.list-menu .dropdown-content {
+  margin-top: 10px;
+}
+
+.dropdown-content {
+  display: none;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-right: 15px;
+}
+
+.header-menu .dropdown-content {
+  align-items: flex-end;
+}
+
+.header-settings .dropdown-content {
+  align-items: flex-end;
+}
+
+.dropdown-content a,
+.link-btn {
+  font-size: 16px;
+  font-weight: bold;
+  background-color: white;
+  color: black ;
+  box-shadow: 3px 3px 3px black;
+  text-align: right;
+  text-decoration: none;
+  border: none;
+  outline: none;
+  border-radius: 3px;
+  padding: 10px;
+  cursor: pointer;
+  height: fit-content;
+  width: fit-content;
+}
+
+.dropdown-content a {
+  margin-bottom: 10px;
+}
+
+.dropdown-content a:hover,
+.link-btn:hover {
+  background-color: var(--light-secondary);
+  color: black;
+}
+
+.dropdown-content a:active,
+.link-btn:active {
+  background-color: var(--secondary);
+  transform: translateY(4px);
+  color: white ;
+}
+
+.alert-menu button:first-child,
+.list-menu button:first-child {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+/* ouvrir les menus déroulants avec la souris */
+.alert-menu:hover .dropdown-content,
+.list-menu:hover .dropdown-content,
+.header-settings:hover .dropdown-content,
+.header-menu:hover .dropdown-content {
+  display: flex;
+}
+
+.header-menu .fa-chevron-left,
+.header-menu:hover .fa-bars {
+  display: none;
+}
+
+.header-settings .fa-chevron-left,
+.header-settings:hover .fa-gear {
+  display: none;
+}
+
+.header-menu:hover .fa-chevron-left,
+.header-menu .fa-bars {
+  display: block;
+}
+
+.header-settings:hover .fa-chevron-left,
+.header-settings .fa-gear {
+  display: block;
+}
+
+/* ouvrir les menus déroulants avec le focus (tab) */
+.list-menu.tab-opened .dropdown-content,
+.header-settings.tab-opened .dropdown-content,
+.header-menu.tab-opened .dropdown-content {
+  display: flex;
+}
+
+.header-settings.tab-opened .fa-chevron-left,
+.header-menu.tab-opened .fa-chevron-left {
+  display: block;
+}
+
+.header-settings.tab-opened .fa-gear,
+.header-menu.tab-opened .fa-bars {
+  display: none;
+}
+
+.alert-menu .fa-chevron-down,
+.list-menu .fa-chevron-down {
+  display: block;
+  margin-left: 10px;
+  margin-right: 0;
+}
+
+.alert-menu .dropdown-content a,
+.list-menu .dropdown-content a {
+  text-align: left;
+}
+
+.header-menu .dropdown-content a {
+  text-align: right;
+}
+
+.header-settings .dropdown-content a {
+  text-align: right;
+}
+
+/*---------------TABLES---------------*/
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 8px;
+  border-bottom: 1px solid var(--grey2);  
+}
+
+th {
+  background-color: var(--grey1);
+  cursor: pointer;
+}
+
+th:hover {
+  background-color: var(--grey2);
+}
+
+tr:nth-child(even) {
+  background-color: var(--grey2);
+}
+
+.filter-input {
+  width: 100%;
+  padding: 5px;
+}
+
+/*---------------LIST---------------*/
+
+.list {
+  min-height: 720px;
+}
+
+.list label {
+  display: block;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.list select {
+  width: 100%;
+  height: 100px;
+}
+
+.list select.gid {
+  width: auto;
+  height: auto;
+}
+
+.selected-group {
+  display: none;
+  width: auto;
+  height: auto;
+}
+
+.list .container {
+  width: 100%;
+  background-color: white;
+}
+
+.pi-details {
+  margin-top: 20px;
+}
+
+/*---------------INFORMATIONS GRID---------------*/
+
+.informations .page-content {
+  min-width: 95vw;
+  min-height: 90vh;
+}
+.grid-wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  grid-auto-rows: minmax(100px, auto);
+}
+
+.one {
+  grid-column: 1 / 3;
+  grid-row: 1 / 3;
+}
+
+.two {
+  grid-column: 3;
+  grid-row: 1 / 3;
+}
+
+.link, .copy-link-btn {
+    display: flex;
+    margin-right: 10px; /* Espace entre chaque élément */
+}
+/*---------------WHEATHER WIDGET---------------*/
+
+.tomorrow {
+  min-width: 500px;
+  padding-bottom: 22px;
+  position: relative;
+}
+
+.tomorrow a {
+  position: absolute;
+  bottom: 0;
+  transform: translateX(-50%);
+  left: 50%;
+}
+
+.tomorrow img {
+  width: 250px;
+  height: 18px;
+}
+
+.tomorrow iframe {
+  height: 100%;
+  font-size: 20px;
+}
+
+
+#ww_3c6e5842e3df1 {
+  /* Ajoutez les propriétés CSS pour rendre le widget vertical */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  height: 700px;
+}
+
+.ww-box {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.ww_col2 {
+  display: flex;
+  flex-direction: column;
+}
+
+.ww_col2 .ww_child {
+  display: flex;
+  flex-direction: row !important;
+}
+
+.ww_col2 .data {
+  display: flex;
+  flex-direction: row !important;
+}
+
+.ww_child .location {
+  font-size: 30px;
+}
+
+.ww_child .date,
+.ww_child .day,
+.ww_child .night {
+  font-size: 24px;
+}
+
+
+/*Spinner pour le chargement*/
+
+        #spinner {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+        }
+	
+	.d-none {
+    	display: none !important;
+	}
+
