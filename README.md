@@ -35,13 +35,13 @@ _________________________________________________________________________
 
 ## 🖥️ Technologies
 
-     🔧 Architecture Technique (LAMP)
+###    🔧 Architecture Technique (LAMP)
 - **Linux** – Système principal
 - **Apache** – Serveur web
 - **MySQL** – Base de données
 - **PHP** – Backend principal
 
-     🧱 Frontend
+###    🧱 Frontend
 - **HTML / CSS** – Interface responsive
 - **JavaScript** – Interactions (formulaires, AJAX)
 
@@ -65,7 +65,7 @@ _________________________________________________________________________
 
 ## 🚀 Déploiement
 
-    ### ⚙️ Configuration requise
+###     ⚙️ Configuration requise
 
     - PHP 8.2  
     - Serveur web (Apache, Nginx)  
@@ -76,67 +76,67 @@ _________________________________________________________________________
 
 
 
-    ### 🛠️ Installation manuelle
+###     🛠️ Installation manuelle
 
-        1. Clone du dépôt
+1.      Clone du dépôt
 
-            ```bash
+```         bash
             git clone https://github.com/babacaar/Jokiboard.git
             cd Jokiboard/
-            ```
+```
 
-        2. Configurer l'environnement  
+2.      Configurer l'environnement  
         Crée un fichier `.env` dans le dossier config
 
-            ```
-            DBHOST=votre ip
-            DBPORT=3306
-            DBNAME=nom_de_ta_bdd (affichage)
-            DBUSER=ton_utilisateur
-            DBPASS=ton_mot_de_passe
-            ```
+```
+    DBHOST=votre ip
+    DBPORT=3306
+    DBNAME=nom_de_ta_bdd (affichage)
+    DBUSER=ton_utilisateur
+    DBPASS=ton_mot_de_passe
+```
 
-        3. Importer la base de données
+3.      Importer la base de données
         Importer la BDD présente dans le dossier **database**
 
-            ```bash
-            mysql -u utilisateur -p base_de_donnees < db.sql
-            ```
+```bash
+    mysql -u utilisateur -p base_de_donnees < db.sql
+```
 
-        4. Droits  
+4.      Droits  
         Assure-toi que le serveur web a le droit d’écriture.
+        
+```bash
+    chown -R www-data:www-data chemin/du/projet
+```
 
-            ```bash
-            chown -R www-data:www-data chemin/du/projet
-            ```
-
-        Ne pas oublier de configurer le Virtual Host Apache
-
-
-
-    ### 🛠️ Installation classique avec script
-
-    Exécuter le script `install.sh` présent dans le dossier `INSTALLATION/` Ou lancer simplement la commande suivante :
-    `Noter qu'avec ce script les accès databases, variables d'environnement, dossier de projet sont prédéfinis !`
-
-        ```bash
-            sudo curl -sO https://raw.githubusercontent.com/babacaar/Jokiboard/refs/heads/main/INSTALLATION/install.sh && bash install.sh
-        ```
+>       Ne pas oublier de configurer le Virtual Host Apache
 
 
-    ### 🛠️ Installation assistée (GUI)
 
-    Exécuter le script d'installation assistée `choix_d_installation.sh` (avant de l'exécuter assurez-vous d'installer `dialog` avec :  
+###     🛠️ Installation classique avec script
 
-        ```bash
+Exécuter le script `install.sh` présent dans le dossier `INSTALLATION/` Ou lancer simplement la commande suivante :
+>    `Noter qu'avec ce script les accès databases, variables d'environnement, dossier de projet sont prédéfinis !`
+
+```bash
+    sudo curl -sO https://raw.githubusercontent.com/babacaar/Jokiboard/refs/heads/main/INSTALLATION/install.sh && bash install.sh
+```
+
+
+###     🛠️ Installation assistée (GUI)
+
+Exécuter le script d'installation assistée `choix_d_installation.sh` (avant de l'exécuter assurez-vous d'installer `dialog` avec :  
+
+    ```bash
         sudo apt install dialog
-        ```
+    ```
 
-        ```bash
+    ```bash
         sudo curl -sO https://raw.githubusercontent.com/babacaar/Jokiboard/refs/heads/main/INSTALLATION/choix_d_installation.sh && bash choix_d_installation.sh
-        ```
+    ```
 
-    `Une boite de dialogue vous proposera 3 options Mode Client, Mode Serveur ou Serveur + Client ; Y'a plus qu'à suivre la démarche`
+>    `Une boite de dialogue vous proposera 3 options Mode Client, Mode Serveur ou Serveur + Client ; Y'a plus qu'à suivre la démarche`
 
 _________________________________________________________________________
 
@@ -146,7 +146,7 @@ _________________________________________________________________________
 2. Ajoute les liens à afficher.  
 3. Crée un groupe et associe des Raspberry Pi (IP, user, password).  
 4. Lance l’envoi des scripts. 
-    (Bouton `Rafraichir` de la page `groupe.php` pour diffuser les liens ajoutés) 
+>    (Bouton `Rafraichir` de la page `groupe.php` pour diffuser les liens ajoutés) 
 5. Les Raspberry Pi exécutent automatiquement Chromium ou mpv.
 
 _________________________________________________________________________
