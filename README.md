@@ -144,12 +144,17 @@ _________________________________________________________________________
 
 ## 🚀 Utilisation
 
-1. Accède à l’interface web.  
-2. Ajoute les liens à afficher.  
-3. Crée un groupe et associe des Raspberry Pi (IP, user, password).  
-4. Lance l’envoi des scripts. 
+1. Accède à l’interface web.
+2. Se connecter ou créer un compte  
+3. Dans le menu:
+    - Absences
+    - Groupes & Raspberry Pi
+    - Contenus à afficher `page configuration.php`
+    - etc...
+4. Crée un groupe et associe des Raspberry Pi (IP, user, password).  
+5. Lance l’envoi des scripts. 
 > (Bouton `Rafraichir` de la page `groupe.php` pour diffuser les liens ajoutés) 
-5. Les Raspberry Pi exécutent automatiquement Chromium ou mpv.
+6. Les Raspberry Pi exécutent automatiquement Chromium ou mpv.
 
 _________________________________________________________________________
 
