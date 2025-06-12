@@ -1,14 +1,17 @@
 # 🎓 Jokiboard – Affichage Dynamique pour Raspberry Pi  
 
 ## Table des matières
-- [Présentation](#présentation)
-- [Fonctionnalités principales](#fonctionnalités-principales)
-- [Technologies](#technologies)
-- [Structure du projet](#structure-du-projet)
-- [Installation](#installation)
-- [Utilisation](#utilisation)
-- [Sécurité](#sécurité)
-- [Auteur](#auteur)
+- [Présentation](#-présentation)
+- [Fonctionnalités principales](#-fonctionnalités-principales)
+- [Technologies](#️-technologies)
+- [Structure du projet](#-structure-du-projet)
+- [Déploiement](#-déploiement)
+    - [Installation manuelle](#️-installation-manuelle)
+    - [Installation classique](#️-installation-classique-avec-script)
+    - [Installation rapide assistée](#️-installation-assistée-gui)
+- [Utilisation](#-utilisation)
+- [Sécurité](#-sécurité)
+- [Auteur](#️-auteur)
 _________________________________________________________________________
 
 ## 📌 Présentation
@@ -19,7 +22,7 @@ L'application permet de diffuser, organiser et automatiser les informations impo
 > 🎯 Objectif : renforcer la communication, la modernisation et la gestion des absences, via une interface web centralisée.
 
 _________________________________________________________________________
-## 🧩 Fonctionnalités Principale
+## 🧩 Fonctionnalités Principales
 
 ```
 - 📺 **Affichage dynamique** : diffusion d’infos ponctuelles, menus, alertes...
@@ -50,7 +53,6 @@ _________________________________________________________________________
 ## 📁 Structure du projet
 
 ```bash
-.
 ├── public/                 # Pages accessibles publiquement
 ├── controllers/           # Traitements des formulaires
 ├── config/                # Fichiers de configuration
@@ -67,50 +69,50 @@ _________________________________________________________________________
 
 ###     ⚙️ Configuration requise
 
-    - PHP 8.2  
-    - Serveur web (Apache, Nginx)  
-    - MySQL/MariaDB  
-    - Modules PHP : PDO, ssh2, ftp, mbstring  
-    - Composer (optionnel pour PHPMailer)
-    - Un environnement Linux (pour exécution des scripts .sh sur Raspberry Pi)  
+- PHP 8.2  
+- Serveur web (Apache, Nginx)  
+- MySQL/MariaDB  
+- Modules PHP : PDO, ssh2, ftp, mbstring  
+- Composer (optionnel pour PHPMailer)
+- Un environnement Linux (pour exécution des scripts .sh sur Raspberry Pi)  
 
 
 
 ###     🛠️ Installation manuelle
 
-1.      Clone du dépôt
-
-```         bash
-            git clone https://github.com/babacaar/Jokiboard.git
-            cd Jokiboard/
-```
-
-2.      Configurer l'environnement  
-        Crée un fichier `.env` dans le dossier config
-
-```
-    DBHOST=votre ip
-    DBPORT=3306
-    DBNAME=nom_de_ta_bdd (affichage)
-    DBUSER=ton_utilisateur
-    DBPASS=ton_mot_de_passe
-```
-
-3.      Importer la base de données
-        Importer la BDD présente dans le dossier **database**
+1. Clone du dépôt
 
 ```bash
-    mysql -u utilisateur -p base_de_donnees < db.sql
+git clone https://github.com/babacaar/Jokiboard.git
+cd Jokiboard/
 ```
 
-4.      Droits  
-        Assure-toi que le serveur web a le droit d’écriture.
+2. Configurer l'environnement  
+Crée un fichier `.env` dans le dossier config
+
+```
+DBHOST=votre ip
+DBPORT=3306
+DBNAME=nom_de_ta_bdd (affichage)
+DBUSER=ton_utilisateur
+DBPASS=ton_mot_de_passe
+```
+
+3. Importer la base de données
+Importer la BDD présente dans le dossier **database**
+
+```bash
+mysql -u utilisateur -p base_de_donnees < db.sql
+```
+
+4. Droits  
+Assure-toi que le serveur web a le droit d’écriture.
         
 ```bash
-    chown -R www-data:www-data chemin/du/projet
+chown -R www-data:www-data chemin/du/projet
 ```
 
->       Ne pas oublier de configurer le Virtual Host Apache
+>Ne pas oublier de configurer le Virtual Host Apache
 
 
 
@@ -120,7 +122,7 @@ Exécuter le script `install.sh` présent dans le dossier `INSTALLATION/` Ou lan
 >    `Noter qu'avec ce script les accès databases, variables d'environnement, dossier de projet sont prédéfinis !`
 
 ```bash
-    sudo curl -sO https://raw.githubusercontent.com/babacaar/Jokiboard/refs/heads/main/INSTALLATION/install.sh && bash install.sh
+sudo curl -sO https://raw.githubusercontent.com/babacaar/Jokiboard/refs/heads/main/INSTALLATION/install.sh && bash install.sh
 ```
 
 
@@ -128,15 +130,15 @@ Exécuter le script `install.sh` présent dans le dossier `INSTALLATION/` Ou lan
 
 Exécuter le script d'installation assistée `choix_d_installation.sh` (avant de l'exécuter assurez-vous d'installer `dialog` avec :  
 
-    ```bash
-        sudo apt install dialog
-    ```
+```bash
+sudo apt install dialog
+```
 
-    ```bash
-        sudo curl -sO https://raw.githubusercontent.com/babacaar/Jokiboard/refs/heads/main/INSTALLATION/choix_d_installation.sh && bash choix_d_installation.sh
-    ```
+```bash
+sudo curl -sO https://raw.githubusercontent.com/babacaar/Jokiboard/refs/heads/main/INSTALLATION/choix_d_installation.sh && bash choix_d_installation.sh
+```
 
->    `Une boite de dialogue vous proposera 3 options Mode Client, Mode Serveur ou Serveur + Client ; Y'a plus qu'à suivre la démarche`
+>`Une boite de dialogue vous proposera 3 options Mode Client, Mode Serveur ou Serveur + Client ; Y'a plus qu'à suivre la démarche`
 
 _________________________________________________________________________
 
@@ -146,7 +148,7 @@ _________________________________________________________________________
 2. Ajoute les liens à afficher.  
 3. Crée un groupe et associe des Raspberry Pi (IP, user, password).  
 4. Lance l’envoi des scripts. 
->    (Bouton `Rafraichir` de la page `groupe.php` pour diffuser les liens ajoutés) 
+> (Bouton `Rafraichir` de la page `groupe.php` pour diffuser les liens ajoutés) 
 5. Les Raspberry Pi exécutent automatiquement Chromium ou mpv.
 
 _________________________________________________________________________
