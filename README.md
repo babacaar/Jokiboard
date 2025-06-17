@@ -26,12 +26,12 @@ _________________________________________________________________________
 
 ```
 - 📺 **Affichage dynamique** : diffusion d’infos ponctuelles, menus, alertes...
-- 👨‍🏫 **Gestion des absences** (saisie & consultation)
-- 🖥️ **Administration des écrans** (groupe, hôtes Raspberry Pi)
+- 👨‍🏫 **Gestion des absences** (saisie & consultation), `page display_absences.php`
+- 🖥️ **Administration des écrans** (groupe, hôtes Raspberry Pi) dans la gestion des affichages
 - 🎛️ **Interface personnalisée** par utilisateur
-- 📅 **Planification des contenus**
+- 📅 **Planification des contenus avec la fonctionnalité Informations Ponctuelles**
 - 🧠 **Envoi de scripts & contrôle à distance via SSH/FTP**
-- 📷 **Conversion automatique de pages en images pour affichage**
+- 📷 **Conversion automatique de PDF en images pour affichage des menus**
 - 🔐 **Connexion sécurisée**
 ```
 _________________________________________________________________________
@@ -149,9 +149,9 @@ _________________________________________________________________________
 3. Dans le menu:
     - Absences
     - Groupes & Raspberry Pi
-    - Contenus à afficher `page configuration.php`
+    - Contenus à afficher `Ajout de liens depuis la page configuration.php`
     - etc...
-4. Crée un groupe et associe des Raspberry Pi (IP, user, password).  
+4. Crée un groupe et associe des Raspberry Pi (IP, user, password) depuis la page de `Gestion des affichages`.  
 5. Lance l’envoi des scripts. 
 > (Bouton `Rafraichir` de la page `groupe.php` pour diffuser les liens ajoutés) 
 6. Les Raspberry Pi exécutent automatiquement Chromium ou mpv.

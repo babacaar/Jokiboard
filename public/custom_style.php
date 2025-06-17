@@ -47,7 +47,7 @@ include "../modules/header.php";
                     <div>
                         <label for="background-image-url">Image d'Arrière Plan</label>
                         <input type="text" id="background-image-url" 
-                            value='https://osticket.lpjw.net/osticket/scp/logo.php?backdrop'
+                            value='../assets/images/BGv2.png'
                             placeholder="Entrez l'url de l'arrière plan" />
                     </div>
                     <span><i class="fa-solid fa-circle-info colored-icon"></i> Laissez le champ vide pour enlever
@@ -56,7 +56,7 @@ include "../modules/header.php";
 
                     <div>
                         <label for="logo-url">Logo <span class="required">*</span></label>
-                        <input type="text" id="logo-url"  value='./images/logo_transparent.png'
+                        <input type="text" id="logo-url"  value='../assets/images/LOGOv1.png'
                             placeholder="Entrez l'url du logo" required />
                     </div>
                 </fieldset>

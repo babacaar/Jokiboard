@@ -2,7 +2,7 @@
 
 :root {
   --bg-image-url: /*linear-gradient(var(--transparent-light), var(--transparent-light)),*/
-    url("../images/BGv2.png"); /* default: "https://osticket.lpjw.net/osticket/scp/logo.php?backdrop" */
+    url("../images/BGv2.png"); 
   --background: #ff721f;
   --primary: #ff721f; /* default: #ff721f */
   --light-primary: #ffb98f;

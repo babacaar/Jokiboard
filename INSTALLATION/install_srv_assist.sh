@@ -37,8 +37,28 @@ DB_NAME=$(<db_name.txt)
 dialog --inputbox "Utilisateur MySQL :" 8 60 2>db_user.txt
 DB_USER=$(<db_user.txt)
 
-dialog --insecure --passwordbox "Mot de passe MySQL :" 8 60 2>db_pass.txt
-DB_PASS=$(<db_pass.txt)
+MAX_ATTEMPTS=3
+attempt=1
+
+while [ $attempt -le $MAX_ATTEMPTS ]; do
+    dialog --insecure --passwordbox "Mot de passe MySQL :" 8 60 2>db_pass.txt
+    DB_PASS=$(<db_pass.txt)
+
+    dialog --insecure --passwordbox "Confirmez le mot de passe MySQL :" 8 60 2>db_pass_confirm.txt
+    DB_PASS_CONFIRM=$(<db_pass_confirm.txt)
+
+    if [ "$DB_PASS" = "$DB_PASS_CONFIRM" ]; then
+        break
+    else
+        dialog --msgbox "❌ Les mots de passe MySQL ne correspondent pas. Tentative $attempt sur $MAX_ATTEMPTS." 6 60
+        attempt=$((attempt + 1))
+    fi
+done
+
+if [ $attempt -gt $MAX_ATTEMPTS ]; then
+    dialog --msgbox "❌ Trop d'erreurs. Installation annulée." 6 40
+    exit 1
+fi
 
 dialog --inputbox "Hôte MySQL [IP du serveur] :" 8 60 2>db_host.txt
 DB_HOST=$(<db_host.txt)
@@ -50,10 +70,28 @@ DB_PORT=$(<db_port.txt)
 dialog --inputbox "Nom d'utilisateur du compte d'administrateur du site :" 8 60 "admin" 2>admin_user.txt
 ADMIN_USER=$(<admin_user.txt)
 
-dialog --insecure --passwordbox "Mot de passe du compte d'administrateur du site :" 8 60 2>admin_pass.txt
-ADMIN_PASS=$(<admin_pass.txt)
+while [ $attempt -le $MAX_ATTEMPTS ]; do
+    dialog --insecure --passwordbox "Mot de passe du compte d'administrateur du site :" 8 60 2>admin_pass.txt
+    ADMIN_PASS=$(<admin_pass.txt)
 
-dialog --inputbox "Email du compte d'administrateur du site :" 8 60 "admin@example.com" 2>admin_email.txt
+    dialog --insecure --passwordbox "Confirmez le mot de passe :" 8 60 2>admin_pass_confirm.txt
+    ADMIN_PASS_CONFIRM=$(<admin_pass_confirm.txt)
+
+    if [ "$ADMIN_PASS" = "$ADMIN_PASS_CONFIRM" ]; then
+        break
+    else
+        dialog --msgbox "❌ Les mots de passe ne correspondent pas. Tentative $attempt sur $MAX_ATTEMPTS." 6 60
+        attempt=$((attempt + 1))
+    fi
+done
+
+if [ $attempt -gt $MAX_ATTEMPTS ]; then
+    dialog --msgbox "❌ Trop d'erreurs. Installation annulée." 6 40
+    exit 1
+fi
+
+
+dialog --inputbox "Email du compte d'administrateur du site :" 8 60 2>admin_email.txt
 ADMIN_EMAIL=$(<admin_email.txt)
 
 # === Confirmation ===
@@ -100,6 +138,11 @@ mysql -u "$DB_USER" -p"$DB_PASS" -h "$DB_HOST" "$DB_NAME" < "$DB_DUMP" 2>mysql_e
     exit 1
 }
 
+mysql -u "$DB_USER" -p"$DB_PASS" "$DB_NAME" <<EOF
+INSERT INTO configuration (Conf_date, Conf_sites)
+VALUES (NOW(), 'http://$DB_HOST/public/display_absences.php http://$DB_HOST/public/menupeda.jpg http://$DB_HOST/public/menu.jpg');
+EOF
+
 # === Vérification du rôle administrateur ===
 ROLE_EXISTS=$(mysql -u "$DB_USER" -p"$DB_PASS" -Nse "SELECT COUNT(*) FROM Roles WHERE nom_role = 'administrateur';" "$DB_NAME")
 if [ "$ROLE_EXISTS" -eq 0 ]; then
@@ -116,7 +159,6 @@ SET @uid = LAST_INSERT_ID();
 SET @admin_role_id = (SELECT id FROM Roles WHERE nom_role = 'administrateur' LIMIT 1);
 INSERT INTO Utilisateurs_Roles (id_utilisateur, id_role) VALUES (@uid, @admin_role_id);
 EOF
-
 # === .htaccess ===
 cat <<EOF > "$PROJECT_DIR/.htaccess"
 <IfModule mod_rewrite.c>
@@ -142,7 +184,7 @@ VHOST_FILE="/etc/apache2/sites-available/${DOMAIN_NAME}.conf"
 
 sudo bash -c "cat > $VHOST_FILE" <<EOF
 <VirtualHost *:80>
-    ServerAdmin webmaster@localhost
+    ServerAdmin $ADMIN_EMAIL
     ServerName $DOMAIN_NAME
     DocumentRoot $PROJECT_DIR
 
