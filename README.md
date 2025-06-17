@@ -155,6 +155,8 @@ _________________________________________________________________________
 5. Lance l’envoi des scripts. 
 > (Bouton `Rafraichir` de la page `groupe.php` pour diffuser les liens ajoutés) 
 6. Les Raspberry Pi exécutent automatiquement Chromium ou mpv.
+> Notez que le client est paramétré selon l'utilisateur Pi donc il faut impérativement le user pi.
+> Dans la page `Configuration de Base` se trouvent les liens pour accéder aux pages de menus et absences.
 
 _________________________________________________________________________
 
