@@ -23,7 +23,6 @@ PROJECT_DIR="$1"; DB_NAME="$2"; DB_USER="$3"; DB_PASS="$4"
 DB_HOST="${5:-auto}"; DB_PORT="$6"; ADMIN_USER="$7"; ADMIN_PASS="$8"
 ADMIN_EMAIL="$9"; DOMAIN_NAME="${10}"
 
-# IP locale automatique
 if [ -z "$DB_HOST" ] || [ "$DB_HOST" = "auto" ]; then
   DB_HOST=$(hostname -I | awk '{print $1}')
 fi
@@ -32,22 +31,18 @@ APACHE_USER="www-data"
 DB_DUMP="$PROJECT_DIR/database/db.sql"
 ENV_FILE="$PROJECT_DIR/config/.env"
 VHOST_FILE="/etc/apache2/sites-available/${DOMAIN_NAME}.conf"
-SSL_DIR="/etc/ssl/$DOMAIN_NAME"
+SSL_DIR="/etc/letsencrypt/live/$DOMAIN_NAME"
 
 echo "▶️  Installation serveur non‑interactive avec HTTPS…"
 
 apt-get update -y && apt-get upgrade -y
-apt-get install -y mariadb-server apache2 php php-pdo php-ssh2 php-mbstring php-mysql unzip mpv xdotool unclutter wmctrl graphicsmagick git openssl
+apt-get install -y mariadb-server apache2 php php-pdo php-ssh2 php-mbstring php-mysql unzip mpv xdotool unclutter wmctrl graphicsmagick git certbot python3-certbot-apache
 
-# Crée le dossier du projet
 mkdir -p "$PROJECT_DIR"
-
-# Clone JokiBoard uniquement si index.php absent
-if [ ! -f "$PROJECT_DIR/index.php" ]; then
+if [ ! -d "$PROJECT_DIR/.git" ]; then
   git clone https://github.com/babacaar/JokiBoard.git "$PROJECT_DIR"
 fi
 
-# Configuration MariaDB pour accès distant
 CONF_FILE="/etc/mysql/mariadb.conf.d/50-server.cnf"
 if grep -q '^bind-address' "$CONF_FILE"; then
   sed -i 's/^bind-address.*/bind-address = 0.0.0.0/' "$CONF_FILE"
@@ -56,7 +51,6 @@ else
 fi
 systemctl restart mariadb
 
-# Création BDD
 mysql -u root <<SQL
 DROP DATABASE IF EXISTS $DB_NAME;
 DROP USER IF EXISTS '$DB_USER'@'%';
@@ -66,33 +60,24 @@ GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'%';
 FLUSH PRIVILEGES;
 SQL
 
-# Import du dump SQL
 if [ ! -f "$DB_DUMP" ]; then
-  echo "❌  Dump inexistant : $DB_DUMP" >&2
-  exit 1
-fi
+  echo "❌  Dump inexistant : $DB_DUMP" >&2; exit 1; fi
 mysql -u "$DB_USER" -p"$DB_PASS" -h "$DB_HOST" -P "$DB_PORT" "$DB_NAME" < "$DB_DUMP"
 
-# Admin utilisateur + rôle
 mysql -u "$DB_USER" -p"$DB_PASS" "$DB_NAME" <<SQL
 INSERT INTO configuration (Conf_date, Conf_sites)
 VALUES (NOW(), 'https://$DB_HOST/public/display_absences.php https://$DB_HOST/public/menupeda.jpg https://$DB_HOST/public/menu.jpg')
   ON DUPLICATE KEY UPDATE Conf_date = NOW();
-
 INSERT IGNORE INTO Roles (nom_role) VALUES ('administrateur');
-
 SET @hashed := SHA2('$ADMIN_PASS', 256);
 INSERT INTO Utilisateurs (nom_utilisateur, mot_de_passe, email)
 VALUES ('$ADMIN_USER', @hashed, '$ADMIN_EMAIL')
   ON DUPLICATE KEY UPDATE mot_de_passe=@hashed, email='$ADMIN_EMAIL';
-
 SET @uid := (SELECT id FROM Utilisateurs WHERE nom_utilisateur = '$ADMIN_USER');
 SET @rid := (SELECT id FROM Roles WHERE nom_role = 'administrateur');
 INSERT IGNORE INTO Utilisateurs_Roles (id_utilisateur, id_role) VALUES (@uid, @rid);
 SQL
 
-# Fichier .env
-mkdir -p "$(dirname "$ENV_FILE")"
 cat > "$ENV_FILE" <<EOF
 DB_HOST=$DB_HOST
 DB_PORT=$DB_PORT
@@ -102,7 +87,6 @@ DB_PASS=$DB_PASS
 SITE_URL=$PROJECT_DIR
 EOF
 
-# Fichier .htaccess
 cat > "$PROJECT_DIR/.htaccess" <<'EOF'
 <IfModule mod_rewrite.c>
   RewriteEngine On
@@ -116,19 +100,8 @@ cat > "$PROJECT_DIR/.htaccess" <<'EOF'
 </IfModule>
 EOF
 
-# Droits
 chown -R "$APACHE_USER":"$APACHE_USER" "$PROJECT_DIR"
 
-# Génération certificat auto-signé si domaine en .local
-if [[ "$DOMAIN_NAME" == *.local ]]; then
-  mkdir -p "$SSL_DIR"
-  openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-    -keyout "$SSL_DIR/privkey.pem" \
-    -out "$SSL_DIR/fullchain.pem" \
-    -subj "/CN=$DOMAIN_NAME"
-fi
-
-# VHost Apache HTTP + HTTPS
 cat > "$VHOST_FILE" <<EOF
 <VirtualHost *:80>
   ServerName $DOMAIN_NAME
@@ -155,10 +128,14 @@ cat > "$VHOST_FILE" <<EOF
 </VirtualHost>
 EOF
 
-# Activation Apache
 a2dissite 000-default.conf >/dev/null || true
 a2ensite "${DOMAIN_NAME}.conf" >/dev/null
 a2enmod rewrite ssl >/dev/null
+
+certbot --apache -d "$DOMAIN_NAME" --non-interactive --agree-tos --email "$ADMIN_EMAIL" || {
+  echo "⚠️  Certbot a échoué. Le site ne sera pas en HTTPS."
+}
+
 systemctl reload apache2
 
 echo "✅  Installation terminée : https://$DOMAIN_NAME"
