@@ -1,54 +1,36 @@
+# ============================================================================
+# install_server_no_dialog.sh  (HTTPS auto‑signé pour domaine local)
+# ============================================================================
 #!/usr/bin/env bash
 set -euo pipefail
 exec 2>install_debug.log
 
-# ------------------ Paramètres obligatoires ------------------
-# 1  PROJECT_DIR   – chemin d’installation (ex. /var/www/jokiboard)
-# 2  DB_NAME       – nom de la base MariaDB
-# 3  DB_USER       – utilisateur MariaDB
-# 4  DB_PASS       – mot de passe utilisateur MariaDB
-# 5  DB_HOST|auto  – IP ou FQDN du serveur SQL ("auto" = IP locale)
-# 6  DB_PORT       – port SQL (défaut 3306)
-# 7  ADMIN_USER    – login du compte administrateur de l’app
-# 8  ADMIN_PASS    – mot de passe admin
-# 9  ADMIN_EMAIL   – email admin (pour vhost Apache)
-# 10 DOMAIN_NAME   – nom de domaine du vhost (ex. jokiboard.local)
-# -------------------------------------------------------------
+# ------------------ Paramètres ------------------
 if [ "$#" -ne 10 ]; then
-  echo "❌  Usage : sudo $0 PROJECT_DIR DB_NAME DB_USER DB_PASS DB_HOST DB_PORT ADMIN_USER ADMIN_PASS ADMIN_EMAIL DOMAIN_NAME" >&2
-  exit 1
-fi
+  echo "❌  Usage : sudo $0 PROJECT_DIR DB_NAME DB_USER DB_PASS DB_HOST DB_PORT ADMIN_USER ADMIN_PASS ADMIN_EMAIL DOMAIN_NAME" >&2; exit 1; fi
 
 PROJECT_DIR="$1"; DB_NAME="$2"; DB_USER="$3"; DB_PASS="$4"
 DB_HOST="${5:-auto}"; DB_PORT="$6"; ADMIN_USER="$7"; ADMIN_PASS="$8"
 ADMIN_EMAIL="$9"; DOMAIN_NAME="${10}"
 
-if [ -z "$DB_HOST" ] || [ "$DB_HOST" = "auto" ]; then
-  DB_HOST=$(hostname -I | awk '{print $1}')
-fi
+# IP locale si auto
+[ "$DB_HOST" = "auto" ] && DB_HOST=$(hostname -I | awk '{print $1}')
 
 APACHE_USER="www-data"
 DB_DUMP="$PROJECT_DIR/database/db.sql"
 ENV_FILE="$PROJECT_DIR/config/.env"
 VHOST_FILE="/etc/apache2/sites-available/${DOMAIN_NAME}.conf"
-SSL_DIR="/etc/letsencrypt/live/$DOMAIN_NAME"
 
-echo "▶️  Installation serveur non‑interactive avec HTTPS…"
+# ----------- Pré‑requis système -----------
+apt-get update -y && apt-get install -y mariadb-server apache2 php php-mysql php-mbstring php-pdo php-ssh2 unzip git openssl
 
-apt-get update -y && apt-get upgrade -y
-apt-get install -y mariadb-server apache2 php php-pdo php-ssh2 php-mbstring php-mysql unzip mpv xdotool unclutter wmctrl graphicsmagick git certbot python3-certbot-apache
-
+# Dossier projet & clone
 mkdir -p "$PROJECT_DIR"
-if [ ! -d "$PROJECT_DIR/.git" ]; then
-  git clone https://github.com/babacaar/JokiBoard.git "$PROJECT_DIR"
-fi
+[ ! -f "$PROJECT_DIR/index.php" ] && git clone https://github.com/babacaar/JokiBoard.git "$PROJECT_DIR"
 
+# ----------- MariaDB -----------
 CONF_FILE="/etc/mysql/mariadb.conf.d/50-server.cnf"
-if grep -q '^bind-address' "$CONF_FILE"; then
-  sed -i 's/^bind-address.*/bind-address = 0.0.0.0/' "$CONF_FILE"
-else
-  echo 'bind-address = 0.0.0.0' >> "$CONF_FILE"
-fi
+if grep -q '^bind-address' "$CONF_FILE"; then sed -i 's/^bind-address.*/bind-address = 0.0.0.0/' "$CONF_FILE"; else echo 'bind-address = 0.0.0.0' >> "$CONF_FILE"; fi
 systemctl restart mariadb
 
 mysql -u root <<SQL
@@ -60,24 +42,20 @@ GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'%';
 FLUSH PRIVILEGES;
 SQL
 
-if [ ! -f "$DB_DUMP" ]; then
-  echo "❌  Dump inexistant : $DB_DUMP" >&2; exit 1; fi
+[ -f "$DB_DUMP" ] || { echo "Dump SQL manquant ($DB_DUMP)" >&2; exit 1; }
 mysql -u "$DB_USER" -p"$DB_PASS" -h "$DB_HOST" -P "$DB_PORT" "$DB_NAME" < "$DB_DUMP"
 
 mysql -u "$DB_USER" -p"$DB_PASS" "$DB_NAME" <<SQL
-INSERT INTO configuration (Conf_date, Conf_sites)
-VALUES (NOW(), 'https://$DB_HOST/public/display_absences.php https://$DB_HOST/public/menupeda.jpg https://$DB_HOST/public/menu.jpg')
-  ON DUPLICATE KEY UPDATE Conf_date = NOW();
 INSERT IGNORE INTO Roles (nom_role) VALUES ('administrateur');
-SET @hashed := SHA2('$ADMIN_PASS', 256);
-INSERT INTO Utilisateurs (nom_utilisateur, mot_de_passe, email)
-VALUES ('$ADMIN_USER', @hashed, '$ADMIN_EMAIL')
-  ON DUPLICATE KEY UPDATE mot_de_passe=@hashed, email='$ADMIN_EMAIL';
-SET @uid := (SELECT id FROM Utilisateurs WHERE nom_utilisateur = '$ADMIN_USER');
-SET @rid := (SELECT id FROM Roles WHERE nom_role = 'administrateur');
-INSERT IGNORE INTO Utilisateurs_Roles (id_utilisateur, id_role) VALUES (@uid, @rid);
+SET @hash := SHA2('$ADMIN_PASS',256);
+INSERT INTO Utilisateurs (nom_utilisateur,mot_de_passe,email) VALUES ('$ADMIN_USER',@hash,'$ADMIN_EMAIL') ON DUPLICATE KEY UPDATE mot_de_passe=@hash,email='$ADMIN_EMAIL';
+SET @uid := (SELECT id FROM Utilisateurs WHERE nom_utilisateur='$ADMIN_USER');
+SET @rid := (SELECT id FROM Roles WHERE nom_role='administrateur');
+INSERT IGNORE INTO Utilisateurs_Roles (id_utilisateur,id_role) VALUES (@uid,@rid);
 SQL
 
+# ----------- .env -----------
+mkdir -p "$(dirname "$ENV_FILE")"
 cat > "$ENV_FILE" <<EOF
 DB_HOST=$DB_HOST
 DB_PORT=$DB_PORT
@@ -87,21 +65,20 @@ DB_PASS=$DB_PASS
 SITE_URL=$PROJECT_DIR
 EOF
 
-cat > "$PROJECT_DIR/.htaccess" <<'EOF'
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteRule ^$ public/connexion.php [L]
-  RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
-  RewriteBase /
-  RewriteRule ^index\.php$ - [L]
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule . /index.php [L]
-</IfModule>
-EOF
+# ----------- HTTPS : auto‑signé pour .local/.lan sinon Certbot -----------
+if [[ "$DOMAIN_NAME" =~ \.(local|lan)$ ]]; then
+  SSL_DIR="/etc/ssl/$DOMAIN_NAME"
+  mkdir -p "$SSL_DIR"
+  openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+    -keyout "$SSL_DIR/privkey.pem" -out "$SSL_DIR/fullchain.pem" \
+    -subj "/CN=$DOMAIN_NAME"
+else
+  apt-get install -y certbot python3-certbot-apache
+  certbot certonly --apache -d "$DOMAIN_NAME" --non-interactive --agree-tos --email "$ADMIN_EMAIL"
+  SSL_DIR="/etc/letsencrypt/live/$DOMAIN_NAME"
+fi
 
-chown -R "$APACHE_USER":"$APACHE_USER" "$PROJECT_DIR"
-
+# ----------- VHost -----------
 cat > "$VHOST_FILE" <<EOF
 <VirtualHost *:80>
   ServerName $DOMAIN_NAME
@@ -119,23 +96,18 @@ cat > "$VHOST_FILE" <<EOF
     Require all granted
   </Directory>
 
-  ErrorLog \${APACHE_LOG_DIR}/${DOMAIN_NAME}_error.log
-  CustomLog \${APACHE_LOG_DIR}/${DOMAIN_NAME}_access.log combined
-
   SSLEngine on
   SSLCertificateFile $SSL_DIR/fullchain.pem
   SSLCertificateKeyFile $SSL_DIR/privkey.pem
+
+  ErrorLog \${APACHE_LOG_DIR}/${DOMAIN_NAME}_error.log
+  CustomLog \${APACHE_LOG_DIR}/${DOMAIN_NAME}_access.log combined
 </VirtualHost>
 EOF
 
 a2dissite 000-default.conf >/dev/null || true
-a2ensite "${DOMAIN_NAME}.conf" >/dev/null
+ln -sf "$VHOST_FILE" /etc/apache2/sites-enabled/
 a2enmod rewrite ssl >/dev/null
-
-certbot --apache -d "$DOMAIN_NAME" --non-interactive --agree-tos --email "$ADMIN_EMAIL" || {
-  echo "⚠️  Certbot a échoué. Le site ne sera pas en HTTPS."
-}
-
 systemctl reload apache2
 
 echo "✅  Installation terminée : https://$DOMAIN_NAME"
