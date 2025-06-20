@@ -66,7 +66,7 @@ include "../modules/header.php";
 
 			// Ajouter du texte distinct en dessous du message de succès
                 	var additionalText = document.createElement('p');
-                	additionalText.textContent = 'Lien pour afficher le menu: http://' + dbhost + '/menu.jpg';
+                	additionalText.textContent = 'Lien pour afficher le menu: http://' + dbhost + '/public/menu.jpg';
 			additionalText.style.color = '#ff721f';
                 	message.parentNode.appendChild(additionalText);
 

@@ -65,7 +65,7 @@ include "../modules/header.php";
 
                         // Ajouter du texte distinct en dessous du message de succès
                         var additionalText = document.createElement('p');
-                        additionalText.textContent = 'Lien pour afficher le menu péda: http://' + dbhost + '/menupeda.jpg';
+                        additionalText.textContent = 'Lien pour afficher le menu péda: http://' + dbhost + '/public/menupeda.jpg';
                         additionalText.style.color = '#ff721f';
                         message.parentNode.appendChild(additionalText);
 

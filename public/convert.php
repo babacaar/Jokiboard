@@ -31,7 +31,7 @@ include "../modules/header.php";
         <?php
         require_once "../config/controller_config_files.php";
         // Définir le répertoire de destination
-        $destination_dir = "$Url";
+        $destination_dir = "$dbhost/public/";
 
         // Vérifier si le fichier a été téléchargé
         if (isset($_FILES['pdf_file']) && $_FILES['pdf_file']['error'] === UPLOAD_ERR_OK) {
