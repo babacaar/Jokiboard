@@ -146,9 +146,9 @@ sudo systemctl stop alertPpms.service
 
 xset s noblank\n
 xset s off\n
-xset -dpms\n
+xset -dpms\n || true
 unclutter -idle 1 -root &\n
-/usr/bin/chromium-browser --kiosk --noerrdialogs http://$DBHOST/public/bar_info.php
+/usr/bin/chromium --kiosk --noerrdialogs http://$DBHOST/public/bar_info.php
 EOF
 
 
@@ -169,9 +169,9 @@ sudo systemctl stop kiosk.service
 sudo systemctl stop alertFeu.service
 xset s noblank\n
 xset s off\n
-xset -dpms\n
+xset -dpms\n || true
 unclutter -idle 1 -root &\n
-/usr/bin/chromium-browser --kiosk --noerrdialogs http://$DBHOST/public/bar_ppms.php
+/usr/bin/chromium --kiosk --noerrdialogs http://$DBHOST/public/bar_ppms.php
 EOF
 
 
@@ -203,9 +203,9 @@ compteur=0;
 lancer_chromium() {
     xset s noblank
     xset s off
-    xset -dpms
+    xset -dpms || true
     unclutter -idle 1 -root &
- /usr/bin/chromium-browser --kiosk --noerrdialogs https://threatmap.checkpoint.com/  https://cybermap.kaspersky.com/fr/stats#country=177&type=OAS&period=w https://cybermap.kaspersky.com/fr
+ /usr/bin/chromium --kiosk --noerrdialogs https://threatmap.checkpoint.com/ 
     wmctrl -k on
 }
 
@@ -216,7 +216,7 @@ fermer_onglets_chromium() {
 
 #Fonction pour arrêter Chromium
 arreter_chromium() {
-    killall chromium-browser
+    killall chromium
     #Ajoutez ici dutres commandes pour nettoyer l'environnement si nécessaire
 }
 
